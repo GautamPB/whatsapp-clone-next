@@ -1,19 +1,25 @@
 import Head from 'next/head'
 import Sidebar from '../../components/Sidebar'
 import ChatScreen from '../../components/ChatScreen'
-import { db } from '../../firebase'
-import { data } from 'autoprefixer'
+import { auth, db } from '../../firebase'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import getRecipientEmail from '../../utils/getRecipientEmail'
 
 const Chat = ({ chat, messages }) => {
+    const [user] = useAuthState(auth)
+
     return (
         <div className="flex">
             <Head>
-                <title>Chat</title>
+                <title>Chat with {getRecipientEmail(chat.users, user)}</title>
             </Head>
-            <Sidebar />
+
+            <div className="hidden md:inline-block">
+                <Sidebar />
+            </div>
 
             <div className="overflow-scroll scrollbar-hide h-screen">
-                <ChatScreen />
+                <ChatScreen messages={messages} chat={chat} />
             </div>
         </div>
     )
@@ -48,8 +54,6 @@ export async function getServerSideProps(context) {
         id: chatRes.id,
         ...chatRes.data(),
     }
-
-    console.log(chat, messages)
 
     return {
         props: {

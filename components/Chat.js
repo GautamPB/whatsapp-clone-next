@@ -6,7 +6,7 @@ import { db, auth } from '../firebase'
 import { useRouter } from 'next/router'
 
 const Chat = ({ id, users }) => {
-    const router = useRouter(1)
+    const router = useRouter()
     const [user] = useAuthState(auth)
     const [recipientSnapshot] = useCollection(
         db

@@ -44,9 +44,10 @@ const Sidebar = () => {
     }
 
     return (
-        <div>
+        <div className="scrollbar-hide">
             <div className="p-5 flex items-center sticky top-0 bg-white justify-between md:mt-5 py-3">
                 <Avatar
+                    src={user.photoURL}
                     onClick={() => auth.signOut()}
                     className="cursor-pointer hover:opacity-80"
                 />
@@ -65,7 +66,6 @@ const Sidebar = () => {
                     </IconButton>
                 </div>
             </div>
-
             <div className="flex items-center py-2 px-4 rounded-full mx-4 my-3 bg-gray-200">
                 <SearchIcon />
                 <input
@@ -74,13 +74,11 @@ const Sidebar = () => {
                     className="outline-none mx-5 border-none flex-grow bg-transparent"
                 />
             </div>
-
             <div>
                 <Button onClick={createChat} className="w-full">
                     start a new chat
                 </Button>
             </div>
-
             {/* List of chats */}
             {chatsSnapshot?.docs.map((chat) => (
                 <Chat key={chat.id} id={chat.id} users={chat.data().users} />

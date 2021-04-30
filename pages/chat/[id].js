@@ -19,7 +19,7 @@ const Chat = ({ chat, messages }) => {
             </div>
 
             <div className="overflow-scroll scrollbar-hide h-screen">
-                <ChatScreen messages={messages} chat={chat} />
+                <ChatScreen chat={chat} messages={messages} />
             </div>
         </div>
     )
@@ -54,6 +54,8 @@ export async function getServerSideProps(context) {
         id: chatRes.id,
         ...chatRes.data(),
     }
+
+    console.log(messages)
 
     return {
         props: {

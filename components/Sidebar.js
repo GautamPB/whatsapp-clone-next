@@ -53,10 +53,12 @@ const Sidebar = () => {
                         onClick={() => auth.signOut()}
                         className="cursor-pointer hover:opacity-80"
                     />
-                    <h1 className="font-semibold">{user.email}</h1>
+                    <h1 className="font-semibold hidden lg:inline-block">
+                        {user.email}
+                    </h1>
                 </div>
 
-                <div className="flex md:space-x-2 lg:space-x-5">
+                <div className="flex md:space-x-2 lg:space-x-4">
                     <IconButton>
                         <DonutLargeIcon className="cursor-pointer" />
                     </IconButton>

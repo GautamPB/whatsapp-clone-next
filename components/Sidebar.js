@@ -1,3 +1,4 @@
+import styled from 'styled-components'
 import { auth, db } from '../firebase'
 import { Avatar, IconButton, Button } from '@material-ui/core'
 import DonutLargeIcon from '@material-ui/icons/DonutLarge'
@@ -44,13 +45,16 @@ const Sidebar = () => {
     }
 
     return (
-        <div className="scrollbar-hide">
+        <Container>
             <div className="p-5 flex items-center sticky top-0 bg-white justify-between md:mt-5 py-3">
-                <Avatar
-                    src={user.photoURL}
-                    onClick={() => auth.signOut()}
-                    className="cursor-pointer hover:opacity-80"
-                />
+                <div className="flex items-center space-x-4">
+                    <Avatar
+                        src={user.photoURL}
+                        onClick={() => auth.signOut()}
+                        className="cursor-pointer hover:opacity-80"
+                    />
+                    <h1 className="font-semibold">{user.email}</h1>
+                </div>
 
                 <div className="flex md:space-x-2 lg:space-x-5">
                     <IconButton>
@@ -83,8 +87,23 @@ const Sidebar = () => {
             {chatsSnapshot?.docs.map((chat) => (
                 <Chat key={chat.id} id={chat.id} users={chat.data().users} />
             ))}
-        </div>
+        </Container>
     )
 }
 
 export default Sidebar
+
+const Container = styled.div`
+    flex: 0.45;
+    border-right: 1px solid whitesmoke;
+    height: 100vh;
+    min-width: 300px;
+    overflow-y: scroll;
+
+    ::webkit-scrollbar {
+        display: none;
+    }
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+`

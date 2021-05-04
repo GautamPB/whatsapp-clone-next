@@ -41,7 +41,7 @@ export async function getServerSideProps(context) {
     const messages = messageRes.docs
         .map((doc) => ({
             id: doc.id,
-            ...doc.data(),
+            ...doc.data(), //spreads the messages across an array.
         }))
         .map((messages) => ({
             ...messages,
@@ -54,8 +54,6 @@ export async function getServerSideProps(context) {
         id: chatRes.id,
         ...chatRes.data(),
     }
-
-    console.log(messages)
 
     return {
         props: {

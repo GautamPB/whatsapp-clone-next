@@ -12,6 +12,8 @@ import { useCollection } from 'react-firebase-hooks/firestore'
 import EmojiEmotionsOutlinedIcon from '@material-ui/icons/EmojiEmotionsOutlined'
 import MicIcon from '@material-ui/icons/Mic'
 import Message from './Message'
+import getRecipientEmail from '../utils/getRecipientEmail'
+import TimeAgo from 'timeago-react'
 
 const ChatScreen = ({ chat, messages }) => {
     const [input, setInput] = useState('')
@@ -23,6 +25,12 @@ const ChatScreen = ({ chat, messages }) => {
             .doc(router.query.id)
             .collection('messages')
             .orderBy('timestamp', 'asc')
+    )
+
+    const [recipientSnapshot] = useCollection(
+        db
+            .collection('users')
+            .where('email', '==', getRecipientEmail(chat.users, user))
     )
 
     const showMessages = () => {
@@ -68,6 +76,9 @@ const ChatScreen = ({ chat, messages }) => {
         setInput('')
     }
 
+    const recipientEmail = getRecipientEmail(chat.users, user)
+    const recipient = recipientSnapshot?.docs?.[0]?.data()
+
     return (
         <div className="scrollbar-hide p-5 md:mt-5 py-3">
             <div className="flex flex-1 sticky top-0 justify-between bg-white border-b border-gray-200 z-50">
@@ -77,11 +88,28 @@ const ChatScreen = ({ chat, messages }) => {
                         onClick={() => router.push('/')}
                     />
                 </IconButton>
-                <Avatar />
+                {recipient ? (
+                    <Avatar src={recipient?.photoURL} />
+                ) : (
+                    <Avatar>{recipientEmail[0]}</Avatar>
+                )}
 
                 <div className="ml-5 mb-5 flex flex-col w-screen">
-                    <h1 className="text-xl font-semibold">Recipient Email</h1>
-                    <p className="text-gray-500">Last seen...</p>
+                    <h1 className="text-xl font-semibold">{recipientEmail}</h1>
+                    {recipientSnapshot ? (
+                        <p>
+                            Last active:{' '}
+                            {recipient?.lastSeen?.toDate() ? (
+                                <TimeAgo
+                                    dateTime={recipient?.lastSeen?.toDate()}
+                                />
+                            ) : (
+                                'Unavailable'
+                            )}
+                        </p>
+                    ) : (
+                        <p>Loading Last active...</p>
+                    )}
                 </div>
 
                 <div className="flex">
